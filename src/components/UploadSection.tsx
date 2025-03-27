@@ -1,48 +1,24 @@
-
-import React, { useState } from 'react';
+// src/components/UploadSection.tsx
+import React, { useState, useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { Input } from '@/components/ui/input';
-import { UploadCloud, FileText, Check, AlertCircle, MessageSquare } from 'lucide-react';
+import { UploadCloud, FileText, Check, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
-import { supabase } from '@/integrations/supabase/client';
 import { toast } from '@/hooks/use-toast';
-import ResumeChat from './ResumeChat';
+import { parseResume } from '@/utils/resumeParser';
+import { type ResumeData } from '@/utils/resumeParser';
 
 type FileStatus = 'idle' | 'dragging' | 'uploading' | 'success' | 'error';
-type ParsedResume = {
-  contact: {
-    name?: string;
-    email?: string;
-    phone?: string;
-    location?: string;
-    website?: string;
-  };
-  summary?: string;
-  experience?: Array<{
-    title?: string;
-    company?: string;
-    location?: string;
-    startDate?: string;
-    endDate?: string;
-    description?: string[];
-  }>;
-  education?: Array<{
-    degree?: string;
-    institution?: string;
-    location?: string;
-    graduationDate?: string;
-    description?: string;
-  }>;
-  skills?: string[];
-};
 
-const UploadSection = () => {
+interface UploadSectionProps {
+  onResumeProcessed: (resumeData: ResumeData) => void;
+}
+
+const UploadSection: React.FC<UploadSectionProps> = ({ onResumeProcessed }) => {
   const [fileStatus, setFileStatus] = useState<FileStatus>('idle');
   const [fileName, setFileName] = useState<string | null>(null);
   const [dragCounter, setDragCounter] = useState(0);
-  const [parsedResume, setParsedResume] = useState<ParsedResume | null>(null);
-  const [showChat, setShowChat] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleDragEnter = (e: React.DragEvent) => {
     e.preventDefault();
@@ -110,65 +86,12 @@ const UploadSection = () => {
     setFileStatus('uploading');
     
     try {
-      // Upload file to Supabase Storage
-      const fileExt = file.name.split('.').pop();
-      const fileName = `${Math.random().toString(36).substring(2)}.${fileExt}`;
-      const filePath = `resumes/${fileName}`;
-
-      // Since we're just demonstrating and not actually processing files yet,
-      // simulate the parsing with a mock response
+      // Parse the resume file
+      const resumeData = await parseResume(file);
       
-      // Simulate file processing time
-      await new Promise(resolve => setTimeout(resolve, 1500));
+      // Pass the parsed data to the parent component
+      onResumeProcessed(resumeData);
       
-      // Mock resume parsing result - in a real app, this would come from AI processing
-      const mockParsedResume: ParsedResume = {
-        contact: {
-          name: "John Smith",
-          email: "john.smith@example.com",
-          phone: "(555) 123-4567",
-          location: "New York, NY",
-          website: "johnsmith.com"
-        },
-        summary: "Experienced software engineer with 5+ years developing web applications",
-        experience: [
-          {
-            title: "Senior Developer",
-            company: "Tech Company",
-            location: "New York, NY",
-            startDate: "Jan 2020",
-            endDate: "Present",
-            description: [
-              "Led team of 5 developers",
-              "Implemented new features increasing user engagement by 25%",
-              "Reduced load times by 40% through performance optimization"
-            ]
-          },
-          {
-            title: "Web Developer",
-            company: "Startup Inc",
-            location: "Boston, MA",
-            startDate: "Jun 2018",
-            endDate: "Dec 2019",
-            description: [
-              "Developed responsive web applications",
-              "Collaborated with design team on UI/UX improvements"
-            ]
-          }
-        ],
-        education: [
-          {
-            degree: "B.S. Computer Science",
-            institution: "University of Technology",
-            location: "Boston, MA",
-            graduationDate: "May 2018",
-            description: "Graduated with honors"
-          }
-        ],
-        skills: ["JavaScript", "React", "Node.js", "TypeScript", "HTML/CSS", "Git", "AWS"]
-      };
-      
-      setParsedResume(mockParsedResume);
       setFileStatus('success');
       
       toast({
@@ -177,97 +100,46 @@ const UploadSection = () => {
       });
       
     } catch (error) {
-      console.error("Error uploading file:", error);
+      console.error("Error processing file:", error);
       setFileStatus('error');
       toast({
-        title: "Upload Failed",
-        description: "There was an error uploading your resume",
+        title: "Processing Failed",
+        description: "There was an error processing your resume",
         variant: "destructive"
       });
     }
   };
 
-  const handleShowChat = () => {
-    setShowChat(true);
+  const handleUploadClick = () => {
+    fileInputRef.current?.click();
   };
 
-  const handleContinue = () => {
-    // In a real app, we would save the parsed resume data to the database
-    // and navigate to the next step (preferences form)
-    toast({
-      title: "Great!",
-      description: "Moving to the customization step",
-    });
-  };
+  const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
 
-  const renderResumePreview = () => {
-    if (!parsedResume) return null;
-    
-    return (
-      <div className="mt-8 bg-background/50 rounded-lg p-6 border border-border/50 text-left">
-        <h4 className="font-semibold text-lg mb-4">Resume Preview</h4>
-        
-        <div className="space-y-4">
-          <div>
-            <h5 className="font-medium text-primary">Contact Information</h5>
-            <p className="text-sm">{parsedResume.contact.name}</p>
-            <p className="text-sm">{parsedResume.contact.email} | {parsedResume.contact.phone}</p>
-            <p className="text-sm">{parsedResume.contact.location}</p>
-          </div>
-          
-          {parsedResume.summary && (
-            <div>
-              <h5 className="font-medium text-primary">Summary</h5>
-              <p className="text-sm">{parsedResume.summary}</p>
-            </div>
-          )}
-          
-          {parsedResume.experience && parsedResume.experience.length > 0 && (
-            <div>
-              <h5 className="font-medium text-primary">Experience</h5>
-              {parsedResume.experience.map((exp, index) => (
-                <div key={index} className="mb-2">
-                  <p className="text-sm font-medium">{exp.title} at {exp.company}</p>
-                  <p className="text-xs text-muted-foreground">{exp.startDate} - {exp.endDate}</p>
-                </div>
-              ))}
-            </div>
-          )}
-          
-          {parsedResume.skills && (
-            <div>
-              <h5 className="font-medium text-primary">Skills</h5>
-              <div className="flex flex-wrap gap-1">
-                {parsedResume.skills.map((skill, index) => (
-                  <span key={index} className="text-xs bg-primary/10 text-primary px-2 py-1 rounded-full">
-                    {skill}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-    );
+    try {
+      // Your existing file handling logic
+    } catch (error) {
+      console.error('Error handling file:', error);
+    }
   };
 
   return (
-    <section id="upload" className="section-container">
-      <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-16">
-        <span className="bg-lovable-soft-purple text-lovable-purple px-4 py-1.5 rounded-full text-xs font-medium uppercase tracking-wider mb-4 animate-fade-down">
-          Transform Your Resume
-        </span>
-        <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight mb-4 animate-fade-down animate-stagger-1">
-          Turn Your Resume Into a <span className="text-gradient">Beautiful Website</span>
-        </h1>
-        <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mb-8 animate-fade-down animate-stagger-2">
-          Upload your resume and let our AI transform it into a professional website in minutes. Customize your site and stand out from the crowd.
-        </p>
-      </div>
+    <div>
+      <section id="upload" className="section-container">
+        <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-16">
+          <span className="bg-lovable-soft-purple text-lovable-purple px-4 py-1.5 rounded-full text-xs font-medium uppercase tracking-wider mb-4 animate-fade-down">
+            Transform Your Resume
+          </span>
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight mb-4 animate-fade-down animate-stagger-1">
+            Turn Your Resume Into a <span className="text-gradient">Beautiful Website</span>
+          </h1>
+          <p className="text-muted-foreground text-lg md:text-xl max-w-2xl mb-8 animate-fade-down animate-stagger-2">
+            Upload your resume and let our AI transform it into a professional website in minutes. Customize your site and stand out from the crowd.
+          </p>
+        </div>
 
-      {showChat && parsedResume ? (
-        <ResumeChat resumeData={parsedResume} onClose={() => setShowChat(false)} />
-      ) : (
         <Card 
           className={cn(
             "max-w-xl mx-auto lovable-card transition-all duration-300 animate-fade-up animate-stagger-3",
@@ -292,10 +164,11 @@ const UploadSection = () => {
                     Drag and drop your resume file, or click to browse. We support PDF, DOCX, and TXT formats.
                   </p>
                   <input
+                    ref={fileInputRef}
                     type="file"
                     id="resume-upload"
                     className="hidden"
-                    accept=".pdf,.docx,.txt"
+                    accept=".pdf,.docx"
                     onChange={handleFileInput}
                   />
                   <label htmlFor="resume-upload">
@@ -309,7 +182,7 @@ const UploadSection = () => {
                   <div className="w-16 h-16 rounded-full bg-lovable-soft-purple flex items-center justify-center mb-6">
                     <div className="h-8 w-8 border-4 border-lovable-light-purple border-t-lovable-purple rounded-full animate-spin"></div>
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Uploading...</h3>
+                  <h3 className="text-xl font-semibold mb-2">Processing Resume...</h3>
                   <p className="text-muted-foreground mb-2">{fileName}</p>
                   <div className="w-full max-w-md bg-lovable-soft-purple/30 rounded-full h-2 mb-6">
                     <div className="bg-lovable-purple h-2 rounded-full animate-pulse"></div>
@@ -320,21 +193,15 @@ const UploadSection = () => {
                   <div className="w-16 h-16 rounded-full bg-green-100 flex items-center justify-center mb-6">
                     <Check className="h-8 w-8 text-green-600" />
                   </div>
-                  <h3 className="text-xl font-semibold mb-2">Upload Complete!</h3>
+                  <h3 className="text-xl font-semibold mb-2">Resume Processed!</h3>
                   <p className="text-muted-foreground mb-6">{fileName}</p>
-                  
-                  {renderResumePreview()}
                   
                   <div className="flex space-x-4 mt-6">
                     <Button variant="outline" className="rounded-full" onClick={() => setFileStatus('idle')}>
                       Upload Another
                     </Button>
-                    <Button className="rounded-full flex items-center gap-2 bg-lovable-purple hover:bg-lovable-secondary-purple" onClick={handleShowChat}>
-                      <MessageSquare className="h-4 w-4" />
-                      Customize with AI
-                    </Button>
-                    <Button className="rounded-full bg-lovable-tertiary-purple hover:bg-lovable-secondary-purple" onClick={handleContinue}>
-                      Continue
+                    <Button className="rounded-full bg-lovable-tertiary-purple hover:bg-lovable-secondary-purple">
+                      Continue to Customize
                     </Button>
                   </div>
                 </>
@@ -355,8 +222,8 @@ const UploadSection = () => {
             </div>
           </div>
         </Card>
-      )}
-    </section>
+      </section>
+    </div>
   );
 };
 
