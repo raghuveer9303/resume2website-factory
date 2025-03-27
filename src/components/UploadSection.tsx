@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
-import { FileUpload, FileText, Check, AlertCircle } from 'lucide-react';
+import { UploadCloud, FileText, Check, AlertCircle } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type FileStatus = 'idle' | 'dragging' | 'uploading' | 'success' | 'error';
@@ -109,7 +109,7 @@ const UploadSection = () => {
             {fileStatus === 'idle' || fileStatus === 'dragging' ? (
               <>
                 <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                  <FileUpload className="h-8 w-8 text-primary" />
+                  <UploadCloud className="h-8 w-8 text-primary" />
                 </div>
                 <h3 className="text-xl font-semibold mb-2">Upload Your Resume</h3>
                 <p className="text-muted-foreground mb-6 max-w-md">
@@ -123,8 +123,8 @@ const UploadSection = () => {
                   onChange={handleFileInput}
                 />
                 <label htmlFor="resume-upload">
-                  <Button variant="default" className="rounded-full px-6" component="span">
-                    Browse Files
+                  <Button variant="default" className="rounded-full px-6" asChild>
+                    <span>Browse Files</span>
                   </Button>
                 </label>
               </>
