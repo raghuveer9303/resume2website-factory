@@ -132,13 +132,13 @@ const ResumeChat: React.FC<ResumeChatProps> = ({ resumeData, onClose }) => {
   };
 
   return (
-    <Card className="max-w-3xl mx-auto glass-card animate-fade-up">
-      <div className="p-4 border-b flex items-center justify-between">
-        <Button variant="ghost" size="icon" onClick={onClose}>
+    <Card className="max-w-3xl mx-auto lovable-card animate-fade-up">
+      <div className="p-4 border-b border-lovable-soft-purple/50 flex items-center justify-between">
+        <Button variant="ghost" size="icon" onClick={onClose} className="text-lovable-purple hover:text-lovable-secondary-purple">
           <ArrowLeft className="h-5 w-5" />
         </Button>
         <h3 className="font-semibold text-lg flex items-center gap-2">
-          <Sparkles className="h-5 w-5 text-primary" />
+          <Sparkles className="h-5 w-5 text-lovable-purple" />
           AI Resume Customization
         </h3>
         <div className="w-8"></div> {/* Spacer for balance */}
@@ -154,8 +154,8 @@ const ResumeChat: React.FC<ResumeChatProps> = ({ resumeData, onClose }) => {
               className={`
                 max-w-[80%] p-3 rounded-lg 
                 ${message.sender === 'user' 
-                  ? 'bg-primary text-primary-foreground rounded-br-none' 
-                  : 'bg-muted text-foreground rounded-bl-none'}
+                  ? 'bg-lovable-purple text-white rounded-br-none' 
+                  : 'bg-lovable-soft-purple text-foreground rounded-bl-none'}
               `}
             >
               <div className="flex items-center gap-2 mb-1">
@@ -175,15 +175,15 @@ const ResumeChat: React.FC<ResumeChatProps> = ({ resumeData, onClose }) => {
         
         {isTyping && (
           <div className="flex justify-start">
-            <div className="bg-muted p-3 rounded-lg rounded-bl-none max-w-[80%]">
+            <div className="bg-lovable-soft-purple p-3 rounded-lg rounded-bl-none max-w-[80%]">
               <div className="flex items-center gap-2 mb-1">
                 <Bot className="h-4 w-4" />
                 <span className="text-xs opacity-70">AI Assistant</span>
               </div>
               <div className="flex space-x-1">
-                <div className="h-2 w-2 bg-primary/60 rounded-full animate-bounce"></div>
-                <div className="h-2 w-2 bg-primary/60 rounded-full animate-bounce animation-delay-200"></div>
-                <div className="h-2 w-2 bg-primary/60 rounded-full animate-bounce animation-delay-400"></div>
+                <div className="h-2 w-2 bg-lovable-purple rounded-full animate-bounce"></div>
+                <div className="h-2 w-2 bg-lovable-purple rounded-full animate-bounce animation-delay-200"></div>
+                <div className="h-2 w-2 bg-lovable-purple rounded-full animate-bounce animation-delay-400"></div>
               </div>
             </div>
           </div>
@@ -198,7 +198,7 @@ const ResumeChat: React.FC<ResumeChatProps> = ({ resumeData, onClose }) => {
             <button
               key={index}
               onClick={() => handleSuggestionClick(suggestion)}
-              className="text-xs px-3 py-1 bg-primary/10 text-primary rounded-full hover:bg-primary/20 transition-colors"
+              className="text-xs px-3 py-1 bg-lovable-soft-purple text-lovable-purple rounded-full hover:bg-lovable-soft-purple/70 transition-colors"
             >
               {suggestion}
             </button>
@@ -211,9 +211,14 @@ const ResumeChat: React.FC<ResumeChatProps> = ({ resumeData, onClose }) => {
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Type your customization request..."
-            className="flex-1"
+            className="flex-1 lovable-input"
           />
-          <Button size="icon" onClick={handleSendMessage} disabled={!input.trim()}>
+          <Button 
+            size="icon" 
+            onClick={handleSendMessage} 
+            disabled={!input.trim()} 
+            className="bg-lovable-purple hover:bg-lovable-secondary-purple"
+          >
             <Send className="h-4 w-4" />
           </Button>
         </div>

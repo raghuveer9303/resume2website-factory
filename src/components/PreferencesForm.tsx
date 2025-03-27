@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
@@ -54,7 +53,7 @@ const PreferencesForm = () => {
   return (
     <section id="customize" className="section-container">
       <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-16">
-        <span className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-medium uppercase tracking-wider mb-4 animate-fade-down">
+        <span className="bg-lovable-soft-purple text-lovable-purple px-4 py-1.5 rounded-full text-xs font-medium uppercase tracking-wider mb-4 animate-fade-down">
           Make It Yours
         </span>
         <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight mb-4 animate-fade-down animate-stagger-1">
@@ -65,34 +64,34 @@ const PreferencesForm = () => {
         </p>
       </div>
 
-      <Card className="max-w-4xl mx-auto glass-card overflow-hidden animate-fade-up">
+      <Card className="max-w-4xl mx-auto lovable-card overflow-hidden animate-fade-up">
         <Tabs defaultValue="style" className="w-full">
-          <div className="border-b">
+          <div className="border-b border-lovable-soft-purple/50">
             <TabsList className="w-full rounded-none justify-start p-0 h-auto bg-transparent border-b">
               <TabsTrigger 
                 value="style" 
-                className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:rounded-none rounded-none py-4 px-6"
+                className="data-[state=active]:border-b-2 data-[state=active]:border-lovable-purple data-[state=active]:rounded-none rounded-none py-4 px-6"
               >
                 <Paintbrush className="h-4 w-4 mr-2" />
                 Style
               </TabsTrigger>
               <TabsTrigger 
                 value="colors" 
-                className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:rounded-none rounded-none py-4 px-6"
+                className="data-[state=active]:border-b-2 data-[state=active]:border-lovable-purple data-[state=active]:rounded-none rounded-none py-4 px-6"
               >
                 <Palette className="h-4 w-4 mr-2" />
                 Colors
               </TabsTrigger>
               <TabsTrigger 
                 value="sections" 
-                className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:rounded-none rounded-none py-4 px-6"
+                className="data-[state=active]:border-b-2 data-[state=active]:border-lovable-purple data-[state=active]:rounded-none rounded-none py-4 px-6"
               >
                 <Sliders className="h-4 w-4 mr-2" />
                 Sections
               </TabsTrigger>
               <TabsTrigger 
                 value="content" 
-                className="data-[state=active]:border-b-2 data-[state=active]:border-primary data-[state=active]:rounded-none rounded-none py-4 px-6"
+                className="data-[state=active]:border-b-2 data-[state=active]:border-lovable-purple data-[state=active]:rounded-none rounded-none py-4 px-6"
               >
                 <MessageSquare className="h-4 w-4 mr-2" />
                 Content
@@ -152,7 +151,7 @@ const PreferencesForm = () => {
             </div>
             
             <div className="text-right mt-8">
-              <Button className="rounded-full px-6">
+              <Button className="rounded-full px-6 bg-lovable-purple hover:bg-lovable-secondary-purple">
                 Apply Style
               </Button>
             </div>
@@ -206,7 +205,7 @@ const PreferencesForm = () => {
             </div>
             
             <div className="text-right mt-8">
-              <Button className="rounded-full px-6">
+              <Button className="rounded-full px-6 bg-lovable-purple hover:bg-lovable-secondary-purple">
                 Apply Colors
               </Button>
             </div>
@@ -283,7 +282,7 @@ const PreferencesForm = () => {
             </div>
             
             <div className="text-right mt-8">
-              <Button className="rounded-full px-6">
+              <Button className="rounded-full px-6 bg-lovable-purple hover:bg-lovable-secondary-purple">
                 Save Layout
               </Button>
             </div>
@@ -329,7 +328,7 @@ const PreferencesForm = () => {
             </div>
             
             <div className="text-right mt-8">
-              <Button className="rounded-full px-6">
+              <Button className="rounded-full px-6 bg-lovable-purple hover:bg-lovable-secondary-purple">
                 Apply Changes
               </Button>
             </div>

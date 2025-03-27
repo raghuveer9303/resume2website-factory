@@ -2,6 +2,7 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
 import { UploadCloud, FileText, Check, AlertCircle, MessageSquare } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { supabase } from '@/integrations/supabase/client';
@@ -253,7 +254,7 @@ const UploadSection = () => {
   return (
     <section id="upload" className="section-container">
       <div className="flex flex-col items-center text-center max-w-3xl mx-auto mb-16">
-        <span className="bg-primary/10 text-primary px-4 py-1.5 rounded-full text-xs font-medium uppercase tracking-wider mb-4 animate-fade-down">
+        <span className="bg-lovable-soft-purple text-lovable-purple px-4 py-1.5 rounded-full text-xs font-medium uppercase tracking-wider mb-4 animate-fade-down">
           Transform Your Resume
         </span>
         <h1 className="text-4xl md:text-5xl lg:text-6xl font-display font-bold tracking-tight mb-4 animate-fade-down animate-stagger-1">
@@ -269,8 +270,8 @@ const UploadSection = () => {
       ) : (
         <Card 
           className={cn(
-            "max-w-xl mx-auto glass-card transition-all duration-300 animate-fade-up animate-stagger-3",
-            fileStatus === 'dragging' && "ring-2 ring-primary/50",
+            "max-w-xl mx-auto lovable-card transition-all duration-300 animate-fade-up animate-stagger-3",
+            fileStatus === 'dragging' && "ring-2 ring-lovable-purple/50",
             fileStatus === 'success' && "ring-2 ring-green-500/50",
             fileStatus === 'error' && "ring-2 ring-red-500/50"
           )}
@@ -283,8 +284,8 @@ const UploadSection = () => {
             <div className="flex flex-col items-center justify-center text-center">
               {fileStatus === 'idle' || fileStatus === 'dragging' ? (
                 <>
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                    <UploadCloud className="h-8 w-8 text-primary" />
+                  <div className="w-16 h-16 rounded-full bg-lovable-soft-purple flex items-center justify-center mb-6">
+                    <UploadCloud className="h-8 w-8 text-lovable-purple" />
                   </div>
                   <h3 className="text-xl font-semibold mb-2">Upload Your Resume</h3>
                   <p className="text-muted-foreground mb-6 max-w-md">
@@ -298,20 +299,20 @@ const UploadSection = () => {
                     onChange={handleFileInput}
                   />
                   <label htmlFor="resume-upload">
-                    <Button variant="default" className="rounded-full px-6" asChild>
+                    <Button className="rounded-full px-6 bg-lovable-purple hover:bg-lovable-secondary-purple" asChild>
                       <span>Browse Files</span>
                     </Button>
                   </label>
                 </>
               ) : fileStatus === 'uploading' ? (
                 <>
-                  <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mb-6">
-                    <div className="h-8 w-8 border-4 border-primary/30 border-t-primary rounded-full animate-spin"></div>
+                  <div className="w-16 h-16 rounded-full bg-lovable-soft-purple flex items-center justify-center mb-6">
+                    <div className="h-8 w-8 border-4 border-lovable-light-purple border-t-lovable-purple rounded-full animate-spin"></div>
                   </div>
                   <h3 className="text-xl font-semibold mb-2">Uploading...</h3>
                   <p className="text-muted-foreground mb-2">{fileName}</p>
-                  <div className="w-full max-w-md bg-primary/10 rounded-full h-2 mb-6">
-                    <div className="bg-primary h-2 rounded-full animate-pulse"></div>
+                  <div className="w-full max-w-md bg-lovable-soft-purple/30 rounded-full h-2 mb-6">
+                    <div className="bg-lovable-purple h-2 rounded-full animate-pulse"></div>
                   </div>
                 </>
               ) : fileStatus === 'success' ? (
@@ -328,11 +329,11 @@ const UploadSection = () => {
                     <Button variant="outline" className="rounded-full" onClick={() => setFileStatus('idle')}>
                       Upload Another
                     </Button>
-                    <Button className="rounded-full flex items-center gap-2" onClick={handleShowChat}>
+                    <Button className="rounded-full flex items-center gap-2 bg-lovable-purple hover:bg-lovable-secondary-purple" onClick={handleShowChat}>
                       <MessageSquare className="h-4 w-4" />
                       Customize with AI
                     </Button>
-                    <Button className="rounded-full" onClick={handleContinue}>
+                    <Button className="rounded-full bg-lovable-tertiary-purple hover:bg-lovable-secondary-purple" onClick={handleContinue}>
                       Continue
                     </Button>
                   </div>
@@ -346,7 +347,7 @@ const UploadSection = () => {
                   <p className="text-muted-foreground mb-6">
                     Please upload a PDF, DOCX, or TXT file format.
                   </p>
-                  <Button variant="default" onClick={() => setFileStatus('idle')}>
+                  <Button variant="default" className="bg-lovable-purple hover:bg-lovable-secondary-purple rounded-full" onClick={() => setFileStatus('idle')}>
                     Try Again
                   </Button>
                 </>
